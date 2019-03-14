@@ -5,6 +5,7 @@ int motorPin=11;
 #define mesafeEcho 6
 #define mesafeTrig 7
 int errorLed=10;
+int buzzerPin=9;
 
 int motorDurum=LOW;
 
@@ -17,13 +18,15 @@ pinMode(motorPin,OUTPUT);
 pinMode(mesafeEcho,INPUT);
 pinMode(mesafeTrig,OUTPUT);
 pinMode(errorLed,OUTPUT);
+pinMode(buzzerPin,OUTPUT);
 }
 
 void loop() {
   if(!mesafeYeterliMi()){
-    digitalWrite(errorLed,HIGH);
     motorDurum=LOW;
     digitalWrite(motorPin,motorDurum);
+    digitalWrite(errorLed,HIGH);
+    buzzerCalistir();
   }
   else{
     digitalWrite(errorLed,LOW);
@@ -79,4 +82,9 @@ bool mesafeYeterliMi(){
   else
     return true;
     
+}
+void buzzerCalistir(){
+  tone(buzzerPin,440);
+  delay(1000);
+  noTone(buzzerPin);
 }
