@@ -23,7 +23,7 @@ void loop() {
   if(!mesafeYeterliMi()){
     digitalWrite(errorLed,HIGH);
     motorDurum=LOW;
-    digitalWrite(motorPin,1);
+    digitalWrite(motorPin,motorDurum);
   }
   else{
     digitalWrite(errorLed,LOW);
@@ -79,7 +79,4 @@ bool mesafeYeterliMi(){
   else
     return true;
     
-}/*
-bool mesafeYeterliMi(){
-  return true;
-}*/
+}
