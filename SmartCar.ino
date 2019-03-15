@@ -8,6 +8,8 @@ int errorLed=10;
 int buzzerPin=9;
 
 int motorDurum=LOW;
+bool sinyalSag=false;
+bool sinyalSol=false;
 
 void setup() {
   // put your setup code here, to run once:
@@ -22,6 +24,12 @@ pinMode(buzzerPin,OUTPUT);
 }
 
 void loop() {
+  if(sinyalSol==true){
+    Sinyal(ledSol);
+    }
+  else if(sinyalSag==true){
+    Sinyal(ledSag);
+    }
   if(!mesafeYeterliMi()){
     motorDurum=LOW;
     digitalWrite(motorPin,motorDurum);
@@ -36,7 +44,12 @@ void loop() {
       veri=Serial.read();
     }
   if(veri=='1'){
-    Sinyal(ledSol);
+    sinyalSol=true;
+    sinyalSag=false;
+    veri=Serial.available();
+    }
+  else if(veri=='4'){
+    sinyalSol=false;
     veri=Serial.available();
     }
    else if(veri=='2'){
@@ -51,19 +64,22 @@ void loop() {
      digitalWrite(motorPin,motorDurum);
      veri=Serial.available();
 }
-  else if(veri=='3'){
-    Sinyal(ledSag);
+  if(veri=='3'){
+    sinyalSag=true;
+    sinyalSol=false;
     veri=Serial.available();
-      }
+    }
+  else if(veri=='5'){
+    sinyalSag=false;
+    veri=Serial.available();
+    }
 }
 
 void Sinyal(int led){
-  for(int i=0;i<5;i++){
     digitalWrite(led,HIGH);
     delay(300);
     digitalWrite(led,LOW);
     delay(300);
-  }
 }
 bool mesafeYeterliMi(){
   double duration;
