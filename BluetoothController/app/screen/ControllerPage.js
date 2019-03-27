@@ -20,10 +20,12 @@ import {
   Text,
   Left,
   Body,
-  Title
+  Title,
+  Badge,
+  Right
 } from 'native-base';
 
-import { Actions } from 'react-native-router-flux'
+import { Actions, Reducer } from 'react-native-router-flux'
  
 import BluetoothSerial from 'react-native-bluetooth-serial'
 
@@ -41,22 +43,36 @@ export default class ControllerPage extends Component {
       unpairedDevices: [],
       sagSinyalAcikMi: false,
       solSinyalAcikMi: false,
+      selectedVites:'N',
     }
   }
   motoruCalistir(){
+    if(this.state.selectedVites=='D'){
     BluetoothSerial.write("2")
     .then((res) => {
       console.log(res);
       console.log('Successfuly wrote to device')
     })
     .catch((err) => console.log(err.message))
+  }else if(this.state.selectedVites=='R'){
+    //TODO: geri çalıştır.
+    BluetoothSerial.write("2")
+    .then((res) => {
+      console.log(res);
+      console.log('Successfuly wrote to device')
+    })
+    .catch((err) => console.log(err.message))
+  }else{
+    
+  }
   }
   SagSinyal(){
-    if(!sagSinyalAcikMi){
+    if(!this.state.sagSinyalAcikMi){
     BluetoothSerial.write("1")
     .then((res) => {
     console.log(res);
     console.log('Successfuly wrote to device')
+    this.setState({sagSinyalAcikMi:true})
     })
     .catch((err) => console.log(err.message))
   }else{
@@ -64,16 +80,18 @@ export default class ControllerPage extends Component {
     .then((res) => {
     console.log(res);
     console.log('Successfuly wrote to device')
+    this.setState({sagSinyalAcikMi:false})
     })
     .catch((err) => console.log(err.message))
   }
 }
 SolSinyal(){
-  if(!sagSinyalAcikMi){
+  if(!this.state.solSinyalAcikMi){
     BluetoothSerial.write("3")
     .then((res) => {
     console.log(res);
     console.log('Successfuly wrote to device')
+    this.setState({solSinyalAcikMi:true})
     })
     .catch((err) => console.log(err.message))
   }else{
@@ -81,6 +99,7 @@ SolSinyal(){
     .then((res) => {
     console.log(res);
     console.log('Successfuly wrote to device')
+    this.setState({solSinyalAcikMi:false})
     })
     .catch((err) => console.log(err.message))
   }
@@ -116,16 +135,40 @@ SolSinyal(){
               </Button>
             </View>
             <View>
+              <Button light style={styles.yon} onPress={this.motoruCalistir.bind(this)}>
+                <Icon type="FontAwesome" name="circle" />
+              </Button>
+            </View>
+            <View>
               <Button light style={styles.yon}>
                 <Icon type="FontAwesome" name="arrow-right" />
               </Button>
             </View>
           </View>
-
-          <Button full onPress={this.motoruCalistir.bind(this)}>
-              <Text>Motoru Çalıştır.</Text>
-          </Button>
+          <View >
+          <Right style={styles.vitesWrapper}>
           
+            <TouchableOpacity onPress={()=>this.setState({selectedVites:"D"})}>
+              <Badge primary style={this.state.selectedVites=="D"?styles.vitesSelected:styles.vites}>
+                <Text style={this.state.selectedVites=="D"?styles.vitesSelectedText:styles.vitesText}>D</Text>
+              </Badge>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=>this.setState({selectedVites:"N"})}>
+              <Badge primary style={this.state.selectedVites=="N"?styles.vitesSelected:styles.vites}>
+                <Text style={this.state.selectedVites=="N"?styles.vitesSelectedText:styles.vitesText}>N</Text>
+              </Badge>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=>this.setState({selectedVites:"R"})}>
+              <Badge primary style={this.state.selectedVites=="R"?styles.vitesSelected:styles.vites}>
+                <Text style={this.state.selectedVites=="R"?styles.vitesSelectedText:styles.vitesText}>R</Text>
+              </Badge>
+            </TouchableOpacity>
+
+            </Right>
+          </View>
+
         </Content>
         <Footer>
           <FooterTab>
@@ -179,4 +222,25 @@ const styles = StyleSheet.create({
     width: 50,
     marginTop: 8,
   },
+  vites:{
+    backgroundColor:'#000'
+  },
+  vitesSelected:{
+    backgroundColor:'#fff'
+  },
+  vitesText:{
+    color:'#fff',
+  },
+  vitesSelectedText:{
+    color:'#000',
+  },
+  vitesWrapper:{
+    backgroundColor:'#A8A8A8',
+    borderRadius: 20,
+    height:100,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginLeft:'85%',
+    marginTop:210,
+  }
 });

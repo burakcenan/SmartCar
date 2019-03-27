@@ -28,6 +28,16 @@ export default class Main extends Component {
       connected: false,
     }
   }
+  componentDidMount(){
+    this.disable()
+    this.setState({
+      isEnabled: false,
+      discovering: false,
+      devices: [],
+      unpairedDevices: [],
+      connected: false,
+    })
+  }
   componentWillMount(){
  
     Promise.all([
@@ -115,15 +125,6 @@ export default class Main extends Component {
       .catch((err) => console.log(err.message))
     }
   }
-  toggleSwitch(){
-    BluetoothSerial.write("2")
-    .then((res) => {
-      console.log(res);
-      console.log('Successfuly wrote to device')
-      this.setState({ connected: true })
-    })
-    .catch((err) => console.log(err.message))
-  }
   render() {
     return (
       <ImageBackground source={BgImage} style={styles.container}> 
@@ -146,11 +147,6 @@ export default class Main extends Component {
           data={this.state.devices}
           keyExtractor={item => item.id}
           renderItem={(item) => this._renderItem(item)}
-        />
-        <Button
-          onPress={this.toggleSwitch.bind(this)}
-          title="Motoru Çalıştır."
-          color="#001B68"
         />
       </ImageBackground>
     );

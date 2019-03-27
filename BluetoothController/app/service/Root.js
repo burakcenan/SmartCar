@@ -13,7 +13,7 @@ render() {
         <Router navigationBarStyle={styles.navBar} renderRightButton>
             <Scene key='Root'>
                 <Scene key='Main' initial component={Main} hideNavBar />
-                <Scene key='ControllerPage'  component={ControllerPage} hideNavBar />
+                <Scene key='ControllerPage' component={ControllerPage} hideNavBar />
                 <Scene key='DetaylarPage' component={DetaylarPage} hideNavBar />
             </Scene>
         </Router>
