@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux'
- 
+
 import BluetoothSerial from 'react-native-bluetooth-serial'
 
 import BgImage from '../img/bg.png'
 
 export default class Main extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       isEnabled: false,
@@ -28,7 +28,7 @@ export default class Main extends Component {
       connected: false,
     }
   }
-  componentDidMount(){
+  componentDidMount() {
     this.disable()
     this.setState({
       isEnabled: false,
@@ -38,112 +38,112 @@ export default class Main extends Component {
       connected: false,
     })
   }
-  componentWillMount(){
- 
+  componentWillMount() {
+
     Promise.all([
       BluetoothSerial.isEnabled(),
       BluetoothSerial.list()
     ])
-    .then((values) => {
-      const [ isEnabled, devices ] = values
- 
-      this.setState({ isEnabled, devices })
-    })
- 
+      .then((values) => {
+        const [isEnabled, devices] = values
+
+        this.setState({ isEnabled, devices })
+      })
+
     BluetoothSerial.on('bluetoothEnabled', () => {
- 
+
       Promise.all([
         BluetoothSerial.isEnabled(),
         BluetoothSerial.list()
       ])
-      .then((values) => {
-        const [ isEnabled, devices ] = values
-        this.setState({  devices })
-      })
- 
+        .then((values) => {
+          const [isEnabled, devices] = values
+          this.setState({ devices })
+        })
+
       BluetoothSerial.on('bluetoothDisabled', () => {
- 
-         this.setState({ devices: [] })
- 
+
+        this.setState({ devices: [] })
+
       })
       BluetoothSerial.on('error', (err) => console.log(`Error: ${err.message}`))
- 
+
     })
- 
+
   }
-  connect (device) {
+  connect(device) {
     this.setState({ connecting: true })
     BluetoothSerial.connect(device.id)
-    .then((res) => {
-      console.log(`${device.name} Cihazına Bağlanıldı.`);
-      Actions.ControllerPage();
-      ToastAndroid.show(`${device.name} Cihazına Bağlanıldı.`, ToastAndroid.SHORT);
-    })
-    .catch((err) => console.log((err.message)))
+      .then((res) => {
+        console.log(`${device.name} Cihazına Bağlanıldı.`);
+        Actions.ControllerPage();
+        ToastAndroid.show(`${device.name} Cihazına Bağlanıldı.`, ToastAndroid.SHORT);
+      })
+      .catch((err) => console.log((err.message)))
   }
-  _renderItem(item){
- 
-    return(
-    <TouchableOpacity onPress={() => this.connect(item.item)}>
-       <View style={styles.deviceNameWrap}>
-          <Text style={styles.deviceName}>{ item.item.name ? item.item.name : item.item.id }</Text>
-       </View>
-    </TouchableOpacity>
-          )
+  _renderItem(item) {
+
+    return (
+      <TouchableOpacity onPress={() => this.connect(item.item)}>
+        <View style={styles.deviceNameWrap}>
+          <Text style={styles.deviceName}>{item.item.name ? item.item.name : item.item.id}</Text>
+        </View>
+      </TouchableOpacity>
+    )
   }
-  enable () {
+  enable() {
     BluetoothSerial.enable()
-    .then((res) => this.setState({ isEnabled: true }))
-    .catch((err) => Toast.showShortBottom(err.message))
+      .then((res) => this.setState({ isEnabled: true }))
+      .catch((err) => Toast.showShortBottom(err.message))
   }
- 
-  disable () {
+
+  disable() {
     BluetoothSerial.disable()
-    .then((res) => this.setState({ isEnabled: false }))
-    .catch((err) => Toast.showShortBottom(err.message))
+      .then((res) => this.setState({ isEnabled: false }))
+      .catch((err) => Toast.showShortBottom(err.message))
   }
- 
-  toggleBluetooth (value) {
+
+  toggleBluetooth(value) {
     if (value === true) {
       this.enable()
     } else {
       this.disable()
     }
   }
-  discoverAvailableDevices () {
-    
+  discoverAvailableDevices() {
+
     if (this.state.discovering) {
       return false
     } else {
       this.setState({ discovering: true })
       BluetoothSerial.discoverUnpairedDevices()
-      .then((unpairedDevices) => {
-        const uniqueDevices = _.uniqBy(unpairedDevices, 'id');
-        console.log(uniqueDevices);
-        this.setState({ unpairedDevices: uniqueDevices, discovering: false })
-      })
-      .catch((err) => console.log(err.message))
+        .then((unpairedDevices) => {
+          const uniqueDevices = _.uniqBy(unpairedDevices, 'id');
+          console.log(uniqueDevices);
+          this.setState({ unpairedDevices: uniqueDevices, discovering: false })
+        })
+        .catch((err) => console.log(err.message))
     }
   }
   render() {
     return (
-      <ImageBackground source={BgImage} style={styles.container}> 
-      <View style={styles.toolbar}>
-            <Text style={styles.toolbarTitle}>Bluetooth Cihazları</Text>
-            <View style={styles.toolbarButton}>
-              <Switch
-                value={this.state.isEnabled}
-                onValueChange={(val) => this.toggleBluetooth(val)}
-              />
-            </View>
-      </View>
+      <ImageBackground source={BgImage} style={styles.container}>
+        <View style={styles.toolbar}>
+          <Text style={styles.toolbarTitle}>Bluetooth Cihazları</Text>
+          <View style={styles.toolbarButton}>
+            <Switch
+              value={this.state.isEnabled}
+              onValueChange={(val) => this.toggleBluetooth(val)}
+            />
+          </View>
+        </View>
         <Button
           onPress={this.discoverAvailableDevices.bind(this)}
           title="Bluetooth Cihazlarını Tara"
           color="#001B68"
         />
         <FlatList
-          style={{flex:1}}
+          style={{ flex: 1 }}
           data={this.state.devices}
           keyExtractor={item => item.id}
           renderItem={(item) => this._renderItem(item)}
@@ -158,21 +158,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
-  toolbar:{
-    paddingTop:30,
-    paddingBottom:30,
-    flexDirection:'row'
+  toolbar: {
+    paddingTop: 30,
+    paddingBottom: 30,
+    flexDirection: 'row'
   },
-  toolbarButton:{
+  toolbarButton: {
     width: 50,
     marginTop: 8,
   },
-  toolbarTitle:{
-    textAlign:'center',
-    fontWeight:'bold',
+  toolbarTitle: {
+    textAlign: 'center',
+    fontWeight: 'bold',
     fontSize: 20,
-    flex:1,
-    marginTop:6,
+    flex: 1,
+    marginTop: 6,
     color: '#000'
   },
   deviceName: {
@@ -181,6 +181,6 @@ const styles = StyleSheet.create({
   },
   deviceNameWrap: {
     margin: 10,
-    borderBottomWidth:1
+    borderBottomWidth: 1
   }
 });

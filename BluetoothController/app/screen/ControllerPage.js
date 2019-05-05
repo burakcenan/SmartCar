@@ -9,13 +9,13 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import { 
-  Container, 
-  Header, 
-  Content, 
-  Footer, 
-  FooterTab, 
-  Icon, 
+import {
+  Container,
+  Header,
+  Content,
+  Footer,
+  FooterTab,
+  Icon,
   Button,
   Text,
   Left,
@@ -26,7 +26,7 @@ import {
 } from 'native-base';
 
 import { Actions, Reducer } from 'react-native-router-flux'
- 
+
 import BluetoothSerial from 'react-native-bluetooth-serial'
 
 import BgImage from '../img/bg.png'
@@ -34,7 +34,7 @@ import BgImage from '../img/bg.png'
 //const { width: viewportWidth, height: viewportHeight } = Dimensions.get("window");
 
 export default class ControllerPage extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       isEnabled: false,
@@ -43,73 +43,95 @@ export default class ControllerPage extends Component {
       unpairedDevices: [],
       sagSinyalAcikMi: false,
       solSinyalAcikMi: false,
-      selectedVites:'N',
     }
   }
-  motoruCalistir(){
-    if(this.state.selectedVites=='D'){
+  ileri() {
     BluetoothSerial.write("2")
-    .then((res) => {
-      console.log(res);
-      console.log('Successfuly wrote to device')
-    })
-    .catch((err) => console.log(err.message))
-  }else if(this.state.selectedVites=='R'){
-    //TODO: geri çalıştır.
-    BluetoothSerial.write("2")
-    .then((res) => {
-      console.log(res);
-      console.log('Successfuly wrote to device')
-    })
-    .catch((err) => console.log(err.message))
-  }else{
-    
+      .then((res) => {
+        console.log(res);
+        console.log('2')
+      })
   }
+  geri() {
+    BluetoothSerial.write("8")
+      .then((res) => {
+        console.log(res);
+        console.log('8')
+      })
   }
-  SagSinyal(){
-    if(!this.state.sagSinyalAcikMi){
-    BluetoothSerial.write("1")
-    .then((res) => {
-    console.log(res);
-    console.log('Successfuly wrote to device')
-    this.setState({sagSinyalAcikMi:true})
-    })
-    .catch((err) => console.log(err.message))
-  }else{
+  sag() {
     BluetoothSerial.write("4")
-    .then((res) => {
-    console.log(res);
-    console.log('Successfuly wrote to device')
-    this.setState({sagSinyalAcikMi:false})
-    })
-    .catch((err) => console.log(err.message))
+      .then((res) => {
+        console.log(res);
+        console.log('4')
+      })
   }
-}
-SolSinyal(){
-  if(!this.state.solSinyalAcikMi){
+  sol() {
+    BluetoothSerial.write("6")
+      .then((res) => {
+        console.log(res);
+        console.log('6')
+      })
+  }
+  sagileri() {
+    BluetoothSerial.write("1")
+      .then((res) => {
+        console.log(res);
+        console.log('1')
+      })
+  }
+  saggeri() {
+    BluetoothSerial.write("7")
+      .then((res) => {
+        console.log(res);
+        console.log('7')
+      })
+  }
+  solileri() {
     BluetoothSerial.write("3")
-    .then((res) => {
-    console.log(res);
-    console.log('Successfuly wrote to device')
-    this.setState({solSinyalAcikMi:true})
-    })
-    .catch((err) => console.log(err.message))
-  }else{
-    BluetoothSerial.write("5")
-    .then((res) => {
-    console.log(res);
-    console.log('Successfuly wrote to device')
-    this.setState({solSinyalAcikMi:false})
-    })
-    .catch((err) => console.log(err.message))
+      .then((res) => {
+        console.log(res);
+        console.log('3')
+      })
   }
-}
+  solgeri() {
+    BluetoothSerial.write("9")
+      .then((res) => {
+        console.log(res);
+        console.log('9')
+      })
+  }
+  dur() {
+    BluetoothSerial.write("5")
+      .then((res) => {
+        console.log(res);
+        console.log('5----')
+      })
+  }
+  SagSinyal() {
+    BluetoothSerial.write("R")
+      .then((res) => {
+        console.log(res);
+        console.log('Successfuly wrote to device')
+        this.setState({ sagSinyalAcikMi: true })
+      })
+      .catch((err) => console.log(err.message))
+  }
+  SolSinyal() {
+    BluetoothSerial.write("L")
+      .then((res) => {
+        console.log(res);
+        console.log('Successfuly wrote to device')
+        this.setState({ solSinyalAcikMi: true })
+      })
+      .catch((err) => console.log(err.message))
+  }
   render() {
     return (
-    <ImageBackground source={BgImage} style={styles.container}> 
+      <ImageBackground source={BgImage} style={styles.container}>
         <Header>
           <Left>
-            <Button transparent onPress={()=>Actions.Main()}>
+            <Button transparent onPress={() => Actions.Main()}>
               <Icon name='arrow-back' />
             </Button>
           </Left>
@@ -118,71 +140,69 @@ SolSinyal(){
           </Body>
         </Header>
         <Content>
-        <View style={styles.signalWrapper}>
+          <View style={styles.signalWrapper}>
             <TouchableOpacity style={styles.signal} onPress={this.SagSinyal.bind(this)}>
-              <Icon type="FontAwesome" name="arrow-circle-left"  style={styles.signalText}/>
+              <Icon type="FontAwesome" name="arrow-circle-left" style={styles.signalText} />
             </TouchableOpacity>
 
             <TouchableOpacity light style={styles.signal} onPress={this.SolSinyal.bind(this)}>
-              <Icon type="FontAwesome" name="arrow-circle-right" style={styles.signalText}/>
+              <Icon type="FontAwesome" name="arrow-circle-right" style={styles.signalText} />
             </TouchableOpacity>
           </View>
 
           <View style={styles.yonWrapper}>
             <View>
-              <Button light style={styles.yon}>
-                <Icon type="FontAwesome" name="arrow-left" />
+              <Button light style={styles.yon} onPressIn={this.sagileri.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-top-left" />
               </Button>
             </View>
             <View>
-              <Button light style={styles.yon} onPress={this.motoruCalistir.bind(this)}>
-                <Icon type="FontAwesome" name="circle" />
+              <Button light style={styles.yon} onPressIn={this.ileri.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-up" />
               </Button>
             </View>
             <View>
-              <Button light style={styles.yon}>
-                <Icon type="FontAwesome" name="arrow-right" />
+              <Button light style={styles.yon} onPressIn={this.solileri.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-top-right" />
               </Button>
             </View>
           </View>
-          <View >
-          <Right style={styles.vitesWrapper}>
-          
-            <TouchableOpacity onPress={()=>this.setState({selectedVites:"D"})}>
-              <Badge primary style={this.state.selectedVites=="D"?styles.vitesSelected:styles.vites}>
-                <Text style={this.state.selectedVites=="D"?styles.vitesSelectedText:styles.vitesText}>D</Text>
-              </Badge>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>this.setState({selectedVites:"N"})}>
-              <Badge primary style={this.state.selectedVites=="N"?styles.vitesSelected:styles.vites}>
-                <Text style={this.state.selectedVites=="N"?styles.vitesSelectedText:styles.vitesText}>N</Text>
-              </Badge>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>this.setState({selectedVites:"R"})}>
-              <Badge primary style={this.state.selectedVites=="R"?styles.vitesSelected:styles.vites}>
-                <Text style={this.state.selectedVites=="R"?styles.vitesSelectedText:styles.vitesText}>R</Text>
-              </Badge>
-            </TouchableOpacity>
-
-            </Right>
+          <View style={styles.yonWrapper}>
+            <View>
+              <Button light style={styles.yon} onPressIn={this.sag.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-left" />
+              </Button>
+            </View>
+            <View>
+              <Button light style={styles.yon} onPress={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="circle" />
+              </Button>
+            </View>
+            <View>
+              <Button light style={styles.yon} onPressIn={this.sol.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-right" />
+              </Button>
+            </View>
           </View>
-
+          <View style={styles.yonWrapper}>
+            <View>
+              <Button light style={styles.yon} onPressIn={this.saggeri.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-bottom-left" />
+              </Button>
+            </View>
+            <View>
+              <Button light style={styles.yon} onPressIn={this.geri.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-down" />
+              </Button>
+            </View>
+            <View>
+              <Button light style={styles.yon} onPressIn={this.solgeri.bind(this)} onPressOut={this.dur.bind(this)}>
+                <Icon type="MaterialCommunityIcons" name="arrow-bottom-right" />
+              </Button>
+            </View>
+          </View>
         </Content>
-        <Footer>
-          <FooterTab>
-            <Button vertical active>
-              <Icon active type="Entypo" name="game-controller" />
-              <Text>Kontrol</Text>
-            </Button>
-            <Button vertical>
-              <Icon type="FontAwesome" name="list-alt" onPress={()=>Actions.DetaylarPage()}/>
-              <Text>Detaylar</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-    </ImageBackground>
+      </ImageBackground>
     );
   }
 }
@@ -192,55 +212,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
-  signalWrapper:{
+  signalWrapper: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 25,
   },
-  yonWrapper:{
+  yonWrapper: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 75,
-    marginVertical: 50,
+    marginHorizontal: 25,
+    marginVertical: 25,
   },
-  signal:{
+  signal: {
     marginHorizontal: 5,
-    marginTop:5,
+    marginTop: 5,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  signalText:{
+  signalText: {
     fontSize: 35,
     color: '#D9D9D9'
   },
-  yon:{
+  yon: {
     borderRadius: 10,
+    width: 100,
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  toolbarButton:{
+  toolbarButton: {
     width: 50,
     marginTop: 8,
   },
-  vites:{
-    backgroundColor:'#000'
-  },
-  vitesSelected:{
-    backgroundColor:'#fff'
-  },
-  vitesText:{
-    color:'#fff',
-  },
-  vitesSelectedText:{
-    color:'#000',
-  },
-  vitesWrapper:{
-    backgroundColor:'#A8A8A8',
-    borderRadius: 20,
-    height:100,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginLeft:'85%',
-    marginTop:210,
-  }
 });
