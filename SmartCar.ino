@@ -37,7 +37,7 @@ int vSpeed=125;
 #define yagmurSensor A2
 
 void buzzerCalistir(){
-  tone(buzzerPin,440);
+  tone(buzzerPin,560);
   delay(200);
   noTone(buzzerPin);
 }
